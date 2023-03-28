@@ -9,9 +9,9 @@ const styles = {
 
 export const Calculator = () => {
   const [data, setData] = React.useState({
-    a: 0,
-    b: 0,
-    result: 0,
+    a: null,
+    b: null,
+    result: null,
     operation: "sum",
   });
 
