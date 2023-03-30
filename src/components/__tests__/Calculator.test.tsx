@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import App from "../../App";
 import {
   divide,
+  getRandomFloat,
   getRandomInt,
   multiply,
   substract,
@@ -23,21 +24,43 @@ it("all in screen", () => {
   expect(calculator).toBeInTheDocument();
 });
 
-it("sum operation", () => {
-  render(<App />);
+let valueA: number;
+let valueB: number;
 
-  const a = screen.getByTestId("a");
-  const b = screen.getByTestId("b");
+describe("with decimals", () => {
+  describe("successfully", () => {
+    beforeEach(() => {
+      valueA = getRandomFloat(9) + 1;
+      valueB = getRandomFloat(9) + 1;
+    });
 
-  const valueA = getRandomInt(10);
-  const valueB = getRandomInt(10);
+    it("sum", () => {
+      render(<App />);
 
-  fireEvent.change(a, { target: { value: valueA } });
-  fireEvent.change(b, { target: { value: valueB } });
+      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
+      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
 
-  const suma = sum(valueA, valueB);
+      expect(sum(valueA, valueB)).toBe(valueA + valueB);
+    });
+  });
+});
 
-  expect(suma).toBe(valueA + valueB);
+describe("with integers", () => {
+  describe("successfully", () => {
+    beforeEach(() => {
+      valueA = getRandomInt(9) + 1;
+      valueB = getRandomInt(9) + 1;
+    });
+
+    it("sum", () => {
+      render(<App />);
+
+      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
+      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
+
+      expect(sum(valueA, valueB)).toBe(valueA + valueB);
+    });
+  });
 });
 
 it("substract operation", () => {

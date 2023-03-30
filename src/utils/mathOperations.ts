@@ -16,7 +16,11 @@ export function divide(a: number, b: number) {
 }
 
 export function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
+  return Math.floor(getRandomFloat(max));
+}
+
+export function getRandomFloat(max: number) {
+  return Math.random() * max;
 }
 
 interface IDictionary<Number> {
