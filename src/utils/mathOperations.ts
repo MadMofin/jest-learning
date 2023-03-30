@@ -19,6 +19,10 @@ export function getRandomInt(max: number) {
   return Math.floor(Math.random() * max);
 }
 
+export function getRandomFloat(max: number) {
+  return Math.floor(Math.random() * max);
+}
+
 interface IDictionary<Number> {
   [id: string]: number;
 }
