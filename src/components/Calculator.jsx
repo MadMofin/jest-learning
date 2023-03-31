@@ -16,12 +16,26 @@ export const Calculator = () => {
   });
 
   React.useEffect(() => {
-    const res = operation(data.a, data.b, data.operation);
-    setData({ ...data, result: res });
+    if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
+      const res = operation(
+        parseFloat(data.a),
+        parseFloat(data.b),
+        data.operation
+      );
+      setData({ ...data, result: res });
+    }
   }, [data.a, data.b, data.operation]);
 
-  const handleChange = (v) =>
-    setData({ ...data, [v.target.name]: parseInt(v.target.value) });
+  const handleChange = (v) => {
+    if (isNaN(parseFloat(v.target.value)))
+      return setData({
+        ...data,
+        [v.target.name]: v.target.value,
+        result: "Enter a valid number",
+      });
+
+    return setData({ ...data, [v.target.name]: v.target.value });
+  };
 
   const handleSelect = (v) =>
     setData({ ...data, [v.target.name]: v.target.value });
@@ -33,27 +47,28 @@ export const Calculator = () => {
         style={styles.input}
         onChange={handleChange}
         name="a"
-        type="text"
         data-testid="a"
-      ></input>
+      />
       <input
         style={styles.input}
         onChange={handleChange}
         name="b"
-        type="text"
         data-testid="b"
-      ></input>
-      <select style={styles.select} onChange={handleSelect} name="operation">
+      />
+      <select
+        style={styles.select}
+        onChange={handleSelect}
+        name="operation"
+        data-testid="operator"
+      >
         <option value="sum">Sum</option>
         <option value="substract">Substract</option>
         <option value="divide">Divide</option>
         <option value="multiply">Multiply</option>
       </select>
-      {data.result !== null && (
-        <div style={styles.result} data-testid="result">
-          Result: {data.result}
-        </div>
-      )}
+      <div style={styles.result} data-testid="result">
+        {data.result !== null && "Result: " + data.result}
+      </div>
     </div>
   );
 };

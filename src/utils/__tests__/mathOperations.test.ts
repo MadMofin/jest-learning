@@ -34,7 +34,6 @@ it("divide by 0", () => {
   let a = getRandomInt(10);
   let b = 0;
 
-  expect(() => {
-    divide(a, b);
-  }).toThrowError("You cant divide by 0 :(");
+  const result = divide(a, b);
+  expect(result).toBe("You cant divide by 0 :(");
 });
