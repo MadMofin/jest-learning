@@ -16,6 +16,8 @@ export const Calculator = () => {
   });
 
   React.useEffect(() => {
+    console.log("hello", data);
+
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
       const res = operation(
         parseFloat(data.a),

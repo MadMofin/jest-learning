@@ -1,6 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+
 import App from "../../App";
-import {
+import * as operations from "../../utils/mathOperations";
+import { Calculator } from "../Calculator";
+
+jest.mock("../../utils/mathOperations");
+
+const {
   divide,
   getRandomCharacter,
   getRandomFloat,
@@ -8,8 +14,7 @@ import {
   multiply,
   substract,
   sum,
-} from "../../utils/mathOperations";
-import { Calculator } from "../Calculator";
+} = operations;
 
 it("all in screen", () => {
   render(<App />);
@@ -118,6 +123,12 @@ describe("with decimals", () => {
   });
 });
 
+export function forEach(items: Array<any>, callback: any) {
+  for (let index = 0; index < items.length; index++) {
+    callback(items[index]);
+  }
+}
+
 describe("with integers", () => {
   describe("successfully", () => {
     beforeEach(() => {
@@ -125,8 +136,20 @@ describe("with integers", () => {
       valueB = getRandomInt(9) + 1;
     });
 
-    it("renders sum", () => {
+    // const mockCallback = jest.fn((x) => 42 + x);
+
+    // it("test", () => {
+    //   forEach([1, 2, 3, 4, 5, 6, 7], mockCallback);
+    //   expect(mockCallback.mock.calls).toHaveLength(7);
+    //   expect(mockCallback.mock.calls[2][0]).toBe(3);
+    // });
+
+    it.only("renders sum", () => {
+      operations.operation.mockReturnValue();
+
       render(<Calculator />);
+
+      console.log(valueA, valueB);
 
       fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
       fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
@@ -134,8 +157,12 @@ describe("with integers", () => {
         target: { value: "sum" },
       });
 
+      // const spy = jest.spyOn(operations, "sum");
+      const result = operations.sum(valueA, valueB);
+
+      // expect(spy).toHaveBeenCalled();
       expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${sum(valueA, valueB)}`
+        `Result: ${result}`
       );
     });
 
