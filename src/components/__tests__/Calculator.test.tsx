@@ -172,7 +172,8 @@ describe("with integers", () => {
       );
 
       const result = operations.operation(
-        parseFloat(inputA.value) + parseFloat(inputB.value),
+        parseFloat(inputA.value),
+        parseFloat(inputB.value),
         inputOperator.value
       );
 
