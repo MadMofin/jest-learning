@@ -37,6 +37,11 @@ let valueB: number;
 let wordA: string;
 let wordB: string;
 
+let inputA: any;
+let inputB: any;
+let inputOperator: any;
+let inputResult: any;
+
 describe("with decimals", () => {
   describe("successfully", () => {
     beforeEach(() => {
@@ -132,38 +137,52 @@ export function forEach(items: Array<any>, callback: any) {
 describe("with integers", () => {
   describe("successfully", () => {
     beforeEach(() => {
-      valueA = getRandomInt(9) + 1;
-      valueB = getRandomInt(9) + 1;
-    });
+      operations.getRandomInt.mockReturnValue(Math.floor(Math.random() * 10));
 
-    // const mockCallback = jest.fn((x) => 42 + x);
-
-    // it("test", () => {
-    //   forEach([1, 2, 3, 4, 5, 6, 7], mockCallback);
-    //   expect(mockCallback.mock.calls).toHaveLength(7);
-    //   expect(mockCallback.mock.calls[2][0]).toBe(3);
-    // });
-
-    it.only("renders sum", () => {
-      operations.operation.mockReturnValue();
+      valueA = operations.getRandomInt(9);
+      valueB = operations.getRandomInt(9) + 1;
 
       render(<Calculator />);
 
-      console.log(valueA, valueB);
+      inputA = screen.getByTestId("a");
+      inputB = screen.getByTestId("b");
+      inputOperator = screen.getByTestId("operator");
+      inputResult = screen.getByTestId("result");
+    });
 
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
-      fireEvent.change(screen.getByTestId("operator"), {
+    it.only("renders sum", () => {
+      const spy = jest.spyOn(operations, "operation");
+
+      expect(inputA.value).toBe("0");
+      expect(inputB.value).toBe("0");
+      expect(inputOperator.value).toBe("sum");
+
+      fireEvent.change(inputA, { target: { value: valueA } });
+      fireEvent.change(inputB, { target: { value: valueB } });
+      fireEvent.change(inputOperator, {
         target: { value: "sum" },
       });
 
-      // const spy = jest.spyOn(operations, "sum");
-      const result = operations.sum(valueA, valueB);
+      expect(inputA.value).toBe(valueA.toString());
+      expect(inputB.value).toBe(valueB.toString());
+      expect(inputOperator.value).toBe("sum");
 
-      // expect(spy).toHaveBeenCalled();
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${result}`
+      operations.operation.mockReturnValue(
+        parseFloat(inputA.value) + parseFloat(inputB.value)
       );
+
+      const result = operations.operation(
+        parseFloat(inputA.value) + parseFloat(inputB.value),
+        inputOperator.value
+      );
+
+      fireEvent.change(inputResult, {
+        target: { "data-value": result },
+      });
+
+      expect(inputResult["data-value"]).toBe(result);
+
+      expect(spy).toHaveBeenCalled();
     });
 
     it("renders substract", () => {

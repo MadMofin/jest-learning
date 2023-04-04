@@ -9,15 +9,13 @@ const styles = {
 
 export const Calculator = () => {
   const [data, setData] = React.useState({
-    a: null,
-    b: null,
+    a: 0,
+    b: 0,
     result: null,
     operation: "sum",
   });
 
   React.useEffect(() => {
-    console.log("hello", data);
-
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
       const res = operation(
         parseFloat(data.a),
@@ -50,25 +48,28 @@ export const Calculator = () => {
         onChange={handleChange}
         name="a"
         data-testid="a"
+        value={data.a}
       />
       <input
         style={styles.input}
         onChange={handleChange}
         name="b"
         data-testid="b"
+        value={data.b}
       />
       <select
         style={styles.select}
         onChange={handleSelect}
         name="operation"
         data-testid="operator"
+        value={data.operation}
       >
         <option value="sum">Sum</option>
         <option value="substract">Substract</option>
         <option value="divide">Divide</option>
         <option value="multiply">Multiply</option>
       </select>
-      <div style={styles.result} data-testid="result">
+      <div style={styles.result} data-testid="result" data-value={data.result}>
         {data.result !== null && "Result: " + data.result}
       </div>
     </div>
