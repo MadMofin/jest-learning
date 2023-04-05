@@ -1,5 +1,5 @@
 import React from "react";
-import { operation } from "../utils/mathOperations";
+import * as operations from "../utils/mathOperations";
 
 const styles = {
   input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
@@ -17,11 +17,12 @@ export const Calculator = () => {
 
   React.useEffect(() => {
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
-      const res = operation(
+      const res = operations.operation(
         parseFloat(data.a),
         parseFloat(data.b),
         data.operation
       );
+
       setData({ ...data, result: res });
     }
   }, [data.a, data.b, data.operation]);

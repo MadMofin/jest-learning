@@ -136,11 +136,15 @@ export function forEach(items: Array<any>, callback: any) {
 
 describe("with integers", () => {
   describe("successfully", () => {
+    let spy = jest.spyOn(operations, "operation");
+
     beforeEach(() => {
       operations.getRandomInt.mockReturnValue(Math.floor(Math.random() * 10));
 
       valueA = operations.getRandomInt(9);
       valueB = operations.getRandomInt(9) + 1;
+
+      operations.operation.mockReturnValue(valueA + valueB);
 
       render(<Calculator />);
 
@@ -151,8 +155,6 @@ describe("with integers", () => {
     });
 
     it.only("renders sum", () => {
-      const spy = jest.spyOn(operations, "operation");
-
       expect(inputA.value).toBe("0");
       expect(inputB.value).toBe("0");
       expect(inputOperator.value).toBe("sum");
@@ -167,21 +169,15 @@ describe("with integers", () => {
       expect(inputB.value).toBe(valueB.toString());
       expect(inputOperator.value).toBe("sum");
 
-      operations.operation.mockReturnValue(
-        parseFloat(inputA.value) + parseFloat(inputB.value)
-      );
-
-      const result = operations.operation(
-        parseFloat(inputA.value),
-        parseFloat(inputB.value),
-        inputOperator.value
-      );
-
       fireEvent.change(inputResult, {
-        target: { "data-value": result },
+        target: {
+          "data-value": parseFloat(inputA.value) + parseFloat(inputB.value),
+        },
       });
 
-      expect(inputResult["data-value"]).toBe(result);
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) + parseFloat(inputB.value)
+      );
 
       expect(spy).toHaveBeenCalled();
     });
