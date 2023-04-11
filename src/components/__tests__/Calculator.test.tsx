@@ -134,6 +134,30 @@ export function forEach(items: Array<any>, callback: any) {
   }
 }
 
+describe("Calculator Tests", () => {
+  describe.only("renders", () => {
+    beforeEach(() => {
+      render(<Calculator />);
+    });
+
+    it("Check left input is in the document", () => {
+      expect(screen.getByTestId("a")).toBeInTheDocument();
+    });
+
+    it("Check right input is in the document", () => {
+      expect(screen.getByTestId("b")).toBeInTheDocument();
+    });
+
+    it("Check operator select is in the document", () => {
+      expect(screen.getByTestId("operator")).toBeInTheDocument();
+    });
+
+    it("Check if result is in the document", () => {
+      expect(screen.getByTestId("result")).toBeInTheDocument();
+    });
+  });
+});
+
 describe("with integers", () => {
   describe("successfully", () => {
     let spy = jest.spyOn(operations, "operation");
