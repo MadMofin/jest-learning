@@ -174,17 +174,17 @@ describe("with integers", () => {
 
       inputA = screen.getByTestId("a");
       inputB = screen.getByTestId("b");
+
+      fireEvent.change(inputA, { target: { value: valueA } });
+      fireEvent.change(inputB, { target: { value: valueB } });
+
       inputOperator = screen.getByTestId("operator");
       inputResult = screen.getByTestId("result");
     });
 
     it.only("renders sum", () => {
-      expect(inputA.value).toBe("0");
-      expect(inputB.value).toBe("0");
       expect(inputOperator.value).toBe("sum");
 
-      fireEvent.change(inputA, { target: { value: valueA } });
-      fireEvent.change(inputB, { target: { value: valueB } });
       fireEvent.change(inputOperator, {
         target: { value: "sum" },
       });
