@@ -28,7 +28,7 @@ export function divide(a: number | string, b: number | string) {
 }
 
 export function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max);
+  return Math.floor(Math.random() * max) + 1;
 }
 
 export function getRandomFloat(max: number) {
