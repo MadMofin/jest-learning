@@ -25,6 +25,7 @@ export const Calculator = () => {
 
       setData({ ...data, result: res });
     }
+    //eslint-disable-next-line
   }, [data.a, data.b, data.operation]);
 
   const handleChange = (v) => {

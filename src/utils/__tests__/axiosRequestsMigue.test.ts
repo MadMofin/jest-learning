@@ -4,6 +4,8 @@ import { fecthAlbum } from "../axiosRequest";
 
 const config = { headers: { "Accept-Encoding": "gzip,deflate,compress" } };
 
+let axiosInstance;
+
 describe("fecthAlbum", () => {
   describe("when API call is successful", () => {
     beforeEach(function () {
@@ -43,6 +45,11 @@ describe("fecthAlbum", () => {
       });
       axios.get.mockResolvedValueOnce(album, config);
       const res = await fecthAlbum();
+
+      const albumRes = await axios.get(
+        "https://jsonplaceholder.typicode.com/albums",
+        config
+      );
 
       expect(axios.get).toHaveBeenCalledWith(
         `https://jsonplaceholder.typicode.com/albums`

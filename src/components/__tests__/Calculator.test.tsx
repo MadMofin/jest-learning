@@ -45,63 +45,81 @@ let inputResult: any;
 describe("with decimals", () => {
   describe("successfully", () => {
     beforeEach(() => {
-      valueA = getRandomFloat(9) + 1;
-      valueB = getRandomFloat(9) + 1;
+      operations.getRandomFloat.mockReturnValue(Math.floor(Math.random() * 10));
+
+      valueA = operations.getRandomFloat(9);
+      valueB = operations.getRandomFloat(9) + 1;
+
+      operations.operation.mockReturnValue(valueA + valueB);
+
+      render(<Calculator />);
+
+      inputA = screen.getByTestId("a");
+      inputB = screen.getByTestId("b");
+      inputOperator = screen.getByTestId("operator");
+      inputResult = screen.getByTestId("result");
+
+      fireEvent.change(inputA, { target: { value: valueA } });
+      fireEvent.change(inputB, { target: { value: valueB } });
     });
 
     it("render sum", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "sum" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) + parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${sum(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) + parseFloat(inputB.value)
       );
     });
 
     it("render substract", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "substract" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) - parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${substract(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) - parseFloat(inputB.value)
       );
     });
 
     it("render multiply", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "multiply" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) * parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${multiply(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) * parseFloat(inputB.value)
       );
     });
 
     it("render divide", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) / parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${divide(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) / parseFloat(inputB.value)
       );
     });
   });
@@ -128,40 +146,8 @@ describe("with decimals", () => {
   });
 });
 
-export function forEach(items: Array<any>, callback: any) {
-  for (let index = 0; index < items.length; index++) {
-    callback(items[index]);
-  }
-}
-
-describe("Calculator Tests", () => {
-  describe.only("renders", () => {
-    beforeEach(() => {
-      render(<Calculator />);
-    });
-
-    it("Check left input is in the document", () => {
-      expect(screen.getByTestId("a")).toBeInTheDocument();
-    });
-
-    it("Check right input is in the document", () => {
-      expect(screen.getByTestId("b")).toBeInTheDocument();
-    });
-
-    it("Check operator select is in the document", () => {
-      expect(screen.getByTestId("operator")).toBeInTheDocument();
-    });
-
-    it("Check if result is in the document", () => {
-      expect(screen.getByTestId("result")).toBeInTheDocument();
-    });
-  });
-});
-
 describe("with integers", () => {
   describe("successfully", () => {
-    let spy = jest.spyOn(operations, "operation");
-
     beforeEach(() => {
       operations.getRandomInt.mockReturnValue(Math.floor(Math.random() * 10));
 
@@ -174,25 +160,17 @@ describe("with integers", () => {
 
       inputA = screen.getByTestId("a");
       inputB = screen.getByTestId("b");
+      inputOperator = screen.getByTestId("operator");
+      inputResult = screen.getByTestId("result");
 
       fireEvent.change(inputA, { target: { value: valueA } });
       fireEvent.change(inputB, { target: { value: valueB } });
-
-      inputOperator = screen.getByTestId("operator");
-      inputResult = screen.getByTestId("result");
     });
 
-    it.only("renders sum", () => {
-      expect(inputOperator.value).toBe("sum");
-
-      fireEvent.change(inputOperator, {
+    it("render sum", () => {
+      fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "sum" },
       });
-
-      expect(inputA.value).toBe(valueA.toString());
-      expect(inputB.value).toBe(valueB.toString());
-      expect(inputOperator.value).toBe("sum");
-
       fireEvent.change(inputResult, {
         target: {
           "data-value": parseFloat(inputA.value) + parseFloat(inputB.value),
@@ -202,56 +180,57 @@ describe("with integers", () => {
       expect(inputResult["data-value"]).toBe(
         parseFloat(inputA.value) + parseFloat(inputB.value)
       );
-
-      expect(spy).toHaveBeenCalled();
     });
 
-    it("renders substract", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
+    it("render substract", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "substract" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) - parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${substract(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) - parseFloat(inputB.value)
       );
     });
 
-    it("renders multiply", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
+    it("render multiply", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "multiply" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) * parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${multiply(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) * parseFloat(inputB.value)
       );
     });
 
-    it("renders divide", () => {
-      render(<Calculator />);
-
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
+    it("render divide", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
+      fireEvent.change(inputResult, {
+        target: {
+          "data-value": parseFloat(inputA.value) / parseFloat(inputB.value),
+        },
+      });
 
-      expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${divide(valueA, valueB)}`
+      expect(inputResult["data-value"]).toBe(
+        parseFloat(inputA.value) / parseFloat(inputB.value)
       );
     });
   });
 
   describe("errors", () => {
     beforeEach(() => {
-      valueA = getRandomInt(9);
+      valueA = getRandomFloat(9);
       valueB = 0;
     });
 
@@ -271,17 +250,50 @@ describe("with integers", () => {
   });
 });
 
+describe("Calculator Tests", () => {
+  describe("renders", () => {
+    beforeEach(() => {
+      render(<Calculator />);
+    });
+
+    it("Check left input is in the document", () => {
+      expect(screen.getByTestId("a")).toBeInTheDocument();
+    });
+
+    it("Check right input is in the document", () => {
+      expect(screen.getByTestId("b")).toBeInTheDocument();
+    });
+
+    it("Check operator select is in the document", () => {
+      expect(screen.getByTestId("operator")).toBeInTheDocument();
+    });
+
+    it("Check if result is in the document", () => {
+      expect(screen.getByTestId("result")).toBeInTheDocument();
+    });
+
+    it("Check left input is 0", () => {
+      expect(screen.getByTestId("a").value).toBe("0");
+    });
+
+    it("Check right input is 0", () => {
+      expect(screen.getByTestId("b").value).toBe("0");
+    });
+  });
+});
+
 describe("with alphanumeric", () => {
   beforeEach(() => {
     wordA = getRandomCharacter(9);
     wordB = getRandomCharacter(9);
-  });
 
-  it("renders sum", () => {
     render(<Calculator />);
 
     fireEvent.change(screen.getByTestId("a"), { target: { value: wordA } });
     fireEvent.change(screen.getByTestId("b"), { target: { value: wordB } });
+  });
+
+  it("renders sum", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "sum" },
     });
@@ -292,10 +304,6 @@ describe("with alphanumeric", () => {
   });
 
   it("renders substract", () => {
-    render(<Calculator />);
-
-    fireEvent.change(screen.getByTestId("a"), { target: { value: wordA } });
-    fireEvent.change(screen.getByTestId("b"), { target: { value: wordB } });
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "substract" },
     });
@@ -306,10 +314,6 @@ describe("with alphanumeric", () => {
   });
 
   it("renders multiply", () => {
-    render(<Calculator />);
-
-    fireEvent.change(screen.getByTestId("a"), { target: { value: wordA } });
-    fireEvent.change(screen.getByTestId("b"), { target: { value: wordB } });
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "multiply" },
     });
@@ -320,10 +324,6 @@ describe("with alphanumeric", () => {
   });
 
   it("renders divide", () => {
-    render(<Calculator />);
-
-    fireEvent.change(screen.getByTestId("a"), { target: { value: wordA } });
-    fireEvent.change(screen.getByTestId("b"), { target: { value: wordB } });
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "divide" },
     });

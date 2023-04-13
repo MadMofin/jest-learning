@@ -11,6 +11,14 @@ export async function fetchUsers() {
   }
 }
 
+export async function fetchPosts() {
+  try {
+    return await axios.get(`https://jsonplaceholder.typicode.com/posts`);
+  } catch (e) {
+    return [];
+  }
+}
+
 export async function fetchTodos() {
   try {
     return await axios.get(`https://jsonplaceholder.typicode.com/todos`);

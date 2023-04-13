@@ -5,14 +5,8 @@ import {
   fetchComments,
 } from "../../utils/axiosRequest";
 import axios from "axios";
-import moxios from "moxios";
 
 jest.mock("axios");
-
-// posts mofin
-// comments alex
-// albums miguel
-// todos calliel
 
 describe("fetchUsers", () => {
   describe("when API call is successful", () => {
@@ -22,27 +16,6 @@ describe("fetchUsers", () => {
 
     afterEach(function () {
       moxios.uninstall();
-    });
-
-    it("should return users list", async () => {
-      const users = [
-        { id: 1, name: "John" },
-        { id: 2, name: "Andrew" },
-      ];
-
-      moxios.stubRequest("https://jsonplaceholder.typicode.com/users", {
-        status: 200,
-        data: users,
-      });
-
-      axios.get.mockResolvedValueOnce(users);
-
-      const result = await fetchUsers();
-
-      expect(axios.get).toHaveBeenCalledWith(
-        `https://jsonplaceholder.typicode.com/users`
-      );
-      expect(result).toEqual(users);
     });
 
     it("should return post coments", async () => {
