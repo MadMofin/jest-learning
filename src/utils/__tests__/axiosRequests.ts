@@ -157,6 +157,7 @@ describe("fetchData", () => {
         "https://jsonplaceholder.typicode.com/users"
       );
       const { data } = response;
+      console.log("asdasd");
       expect(data).toEqual(users);
     });
 
