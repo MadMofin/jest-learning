@@ -157,7 +157,7 @@ describe("fetchData", () => {
         "https://jsonplaceholder.typicode.com/users"
       );
       const { data } = response;
-      expect(data).toEqual([]);
+      expect(data).toEqual(users);
     });
 
     it("should return posts", async () => {
