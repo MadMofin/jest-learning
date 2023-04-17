@@ -14,6 +14,8 @@ export const Calculator = () => {
     result: null,
     operation: "sum",
   });
+  const [history, setHistory] = React.useState([]);
+  const [historyPos, setHistoryPos] = React.useState(0);
 
   React.useEffect(() => {
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
@@ -36,11 +38,54 @@ export const Calculator = () => {
         result: "Enter a valid number",
       });
 
-    return setData({ ...data, [v.target.name]: v.target.value });
+    const newData = { ...data, [v.target.name]: v.target.value };
+    const res = operations.operation(
+      parseFloat(newData.a),
+      parseFloat(newData.b),
+      newData.operation
+    );
+
+    const newHistory = [...history.slice(0, historyPos), newData];
+
+    if (newHistory.length >= 10) newHistory.shift();
+    newHistory.push({ ...newData, result: res });
+
+    setData({ ...newData, result: res });
+    setHistory(newHistory);
+    setHistoryPos(newHistory.length);
   };
 
-  const handleSelect = (v) =>
-    setData({ ...data, [v.target.name]: v.target.value });
+  const handleSelect = (v) => {
+    const newData = { ...data, [v.target.name]: v.target.value };
+    const res = operations.operation(
+      parseFloat(newData.a),
+      parseFloat(newData.b),
+      newData.operation
+    );
+
+    setData({ ...newData, result: res });
+
+    const newHistoryPos = history.length;
+    setHistoryPos(newHistoryPos);
+  };
+
+  React.useEffect(() => {
+    localStorage.setItem("calculatorHistory", JSON.stringify(history));
+    // eslint-disable-next-line
+  }, [history]);
+
+  React.useEffect(() => {
+    const storedHistory = JSON.parse(localStorage.getItem("calculatorHistory"));
+    if (storedHistory) setHistory(storedHistory);
+    // eslint-disable-next-line
+  }, []);
+
+  const operSimbols = {
+    sum: "+",
+    substract: "-",
+    multiply: "*",
+    divide: "/",
+  };
 
   return (
     <div data-testid="calculator">
@@ -73,6 +118,42 @@ export const Calculator = () => {
       </select>
       <div style={styles.result} data-testid="result" data-value={data.result}>
         {data.result !== null && "Result: " + data.result}
+      </div>
+      <br />
+      <br />
+      <h3>History of last operations c:</h3>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          padding: 10,
+        }}
+      >
+        <center>
+          {history && history.length > 0 ? (
+            history.map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: 8,
+                  marginBottom: 8,
+                  width: "50%",
+                }}
+              >
+                <p>{item.a}</p>
+                <p>{operSimbols[item.operation]}</p>
+                <p>{item.b}</p>
+                <p>=</p>
+                <p>{item.result}</p>
+              </div>
+            ))
+          ) : (
+            <p>No history available</p>
+          )}
+        </center>
       </div>
     </div>
   );

@@ -52,6 +52,7 @@ export function getRandomCharacter(max: number) {
   return getCharacters(max);
 }
 
+// eslint-disable-next-line
 interface IDictionary<Number> {
   [id: string]: number | string;
 }
