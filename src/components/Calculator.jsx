@@ -1,5 +1,6 @@
 import React from "react";
 import * as operations from "../utils/mathOperations";
+import { OPERATIONS_SYMBOLS } from "../constants/calculatorConstants";
 
 const styles = {
   input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
@@ -15,7 +16,6 @@ export const Calculator = () => {
     operation: "sum",
   });
   const [history, setHistory] = React.useState([]);
-  const [historyPos, setHistoryPos] = React.useState(0);
 
   React.useEffect(() => {
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
@@ -29,6 +29,24 @@ export const Calculator = () => {
     }
     //eslint-disable-next-line
   }, [data.a, data.b, data.operation]);
+
+  /**
+   * Adds a new data element to the history and limits the number of elements to a maximum of 10.
+   *
+   * @param {Object[]} history - The current history of data.
+   * @param {Object} newData - The new data element to add to the history.
+   * @param {*} res - The result associated with the new data element.
+   * @param {Function} setHistory - The function to update the data history in the state.
+   * @returns {void}
+   */
+
+  const addDataHistory = (newData, res, history, setHistory) => {
+    const newHistory = [...history, newData];
+    if (newHistory.length >= 10) newHistory.shift();
+    newHistory.push({ ...newData, result: res });
+
+    setHistory(newHistory);
+  };
 
   const handleChange = (v) => {
     if (isNaN(parseFloat(v.target.value)))
@@ -44,15 +62,8 @@ export const Calculator = () => {
       parseFloat(newData.b),
       newData.operation
     );
-
-    const newHistory = [...history.slice(0, historyPos), newData];
-
-    if (newHistory.length >= 10) newHistory.shift();
-    newHistory.push({ ...newData, result: res });
-
     setData({ ...newData, result: res });
-    setHistory(newHistory);
-    setHistoryPos(newHistory.length);
+    addDataHistory(newData, res, history, setHistory);
   };
 
   const handleSelect = (v) => {
@@ -64,9 +75,6 @@ export const Calculator = () => {
     );
 
     setData({ ...newData, result: res });
-
-    const newHistoryPos = history.length;
-    setHistoryPos(newHistoryPos);
   };
 
   React.useEffect(() => {
@@ -75,17 +83,12 @@ export const Calculator = () => {
   }, [history]);
 
   React.useEffect(() => {
-    const storedHistory = JSON.parse(localStorage.getItem("calculatorHistory"));
-    if (storedHistory) setHistory(storedHistory);
+    const getHistoryOperations = JSON.parse(
+      localStorage.getItem("calculatorHistory")
+    );
+    if (getHistoryOperations) setHistory(getHistoryOperations);
     // eslint-disable-next-line
   }, []);
-
-  const operSimbols = {
-    sum: "+",
-    substract: "-",
-    multiply: "*",
-    divide: "/",
-  };
 
   return (
     <div data-testid="calculator">
@@ -119,9 +122,7 @@ export const Calculator = () => {
       <div style={styles.result} data-testid="result" data-value={data.result}>
         {data.result !== null && "Result: " + data.result}
       </div>
-      <br />
-      <br />
-      <h3>History of last operations c:</h3>
+      <h3 style={{ paddingTop: 12 }}>History of last operations c:</h3>
       <div
         style={{
           width: "100%",
@@ -144,7 +145,7 @@ export const Calculator = () => {
                 }}
               >
                 <p>{item.a}</p>
-                <p>{operSimbols[item.operation]}</p>
+                <p>{OPERATIONS_SYMBOLS[item.operation]}</p>
                 <p>{item.b}</p>
                 <p>=</p>
                 <p>{item.result}</p>
