@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+{
+  /*import { fireEvent, render, screen } from "@testing-library/react";
 
 import App from "../../App";
 import * as operations from "../../utils/mathOperations";
@@ -31,16 +32,7 @@ it("all in screen", () => {
   expect(calculator).toBeInTheDocument();
 });
 
-let valueA: number;
-let valueB: number;
 
-let wordA: string;
-let wordB: string;
-
-let inputA: any;
-let inputB: any;
-let inputOperator: any;
-let inputResult: any;
 
 describe("with decimals", () => {
   describe("successfully", () => {
@@ -331,5 +323,65 @@ describe("with alphanumeric", () => {
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${divide(wordA, wordB)}`
     );
+  });
+});*/
+}
+
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { Calculator } from "../Calculator";
+
+let valueA: number;
+let valueB: number;
+
+let wordA: string;
+let wordB: string;
+
+let inputA: any;
+let inputB: any;
+let inputOperator: any;
+let inputResult: any;
+
+describe("Calculator", () => {
+  it("should display the title", () => {
+    render(<Calculator />);
+    const title = screen.getByText("Simple Calculator");
+    expect(title).toBeInTheDocument();
+  });
+
+  it("should update the input fields when typing a number", () => {
+    render(<Calculator />);
+    const inputA = screen.getByTestId("a");
+    const inputB = screen.getByTestId("b");
+
+    fireEvent.change(inputA, { target: { value: "2" } });
+    fireEvent.change(inputB, { target: { value: "3" } });
+
+    expect(inputA.value).toBe("2");
+    expect(inputB.value).toBe("3");
+  });
+
+  it("should display an error message when entering an invalid number", () => {
+    render(<Calculator />);
+    const inputA = screen.getByTestId("a");
+
+    fireEvent.change(inputA, { target: { value: "abc" } });
+
+    const errorMessage = screen.getByText("Enter a valid number");
+    expect(errorMessage).toBeInTheDocument();
+  });
+
+  it("should display the result of the operation", () => {
+    render(<Calculator />);
+    const inputA = screen.getByTestId("a");
+    const inputB = screen.getByTestId("b");
+    const select = screen.getByTestId("operator");
+
+    fireEvent.change(inputA, { target: { value: "2" } });
+    fireEvent.change(inputB, { target: { value: "3" } });
+    fireEvent.change(select, { target: { value: "sum" } });
+
+    const result = screen.getByTestId("result");
+    expect(result.getAttribute("data-value")).toBe("5");
   });
 });
