@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import * as operations from "../utils/mathOperations";
+import History from "./History";
 
 const styles = {
   input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
@@ -8,12 +9,21 @@ const styles = {
 };
 
 export const Calculator = () => {
+  const [results, setResults] = useState([]);
   const [data, setData] = React.useState({
     a: 0,
     b: 0,
     result: null,
     operation: "sum",
   });
+
+  const HISTORY_LIMIT = 10;
+
+  const handleHistoryAddOperation = (data, res) => {
+    let newResults = results || [];
+    if (newResults.length >= HISTORY_LIMIT) newResults.shift();
+    setResults([...newResults, { ...data, total: res }]);
+  };
 
   React.useEffect(() => {
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
@@ -22,7 +32,7 @@ export const Calculator = () => {
         parseFloat(data.b),
         data.operation
       );
-
+      handleHistoryAddOperation(data, res);
       setData({ ...data, result: res });
     }
     //eslint-disable-next-line
@@ -74,6 +84,8 @@ export const Calculator = () => {
       <div style={styles.result} data-testid="result" data-value={data.result}>
         {data.result !== null && "Result: " + data.result}
       </div>
+
+      <History {...{ results }} />
     </div>
   );
 };
