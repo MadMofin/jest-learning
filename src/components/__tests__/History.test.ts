@@ -10,6 +10,7 @@ let newData = {};
 let history: any[] = [];
 let res = operations.operation(number1, number2, operationRandom);
 const MAX_HISTORY_LENGHT = 10;
+const NUMBER_OPERATIONS = 15;
 
 describe("addDataHistory", () => {
   test("update History", () => {
@@ -25,7 +26,7 @@ describe("addDataHistory", () => {
   });
 
   test("limit 10 last operations", () => {
-    for (let i = 1; i < 15; i++) {
+    for (let i = 1; i < NUMBER_OPERATIONS; i++) {
       const number1 = getRandomInt(9);
       const number2 = getRandomInt(9) + 1;
       const operationRandom = operations.getRandomWord();
