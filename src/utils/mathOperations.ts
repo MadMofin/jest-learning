@@ -23,7 +23,7 @@ export function divide(a: number | string, b: number | string) {
   if (typeof a === "string" || typeof b === "string")
     return "Enter a valid number";
 
-  if (b === 0) return "You cant divide by 0 :(";
+  if (b === 0) return "You cant divide by 0";
   return a / b;
 }
 

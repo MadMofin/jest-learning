@@ -1,38 +1,68 @@
-{
-  /*import { fireEvent, render, screen } from "@testing-library/react";
-
+import { render, screen, fireEvent } from "@testing-library/react";
+import { Calculator } from "../Calculator";
 import App from "../../App";
 import * as operations from "../../utils/mathOperations";
-import { Calculator } from "../Calculator";
 
 jest.mock("../../utils/mathOperations");
 
-const {
-  divide,
-  getRandomCharacter,
-  getRandomFloat,
-  getRandomInt,
-  multiply,
-  substract,
-  sum,
-} = operations;
+let valueA: number;
+let valueB: number;
+
+let wordA: string;
+let wordB: string;
+
+let inputA: any;
+let inputB: any;
+let inputOperator: any;
+let inputResult: any;
+
+const { divide, getRandomCharacter, getRandomFloat, multiply, substract, sum } =
+  operations;
 
 it("all in screen", () => {
   render(<App />);
 
   const calculator = screen.getByTestId("calculator");
-
+  const title = screen.getByTestId("title");
   const a = screen.getByTestId("a");
+  const operator = screen.getByTestId("operator");
   const b = screen.getByTestId("b");
   const result = screen.getByTestId("result");
 
+  expect(calculator).toBeInTheDocument();
+  expect(title).toBeInTheDocument();
   expect(a).toBeInTheDocument();
+  expect(operator).toBeInTheDocument();
   expect(b).toBeInTheDocument();
   expect(result).toBeInTheDocument();
-  expect(calculator).toBeInTheDocument();
 });
 
+describe("Calculator", () => {
+  beforeEach(() => {
+    render(<Calculator />);
+  });
 
+  it("should update the input fields when typing a number", () => {
+    const inputA = screen.getByTestId("a");
+    const inputB = screen.getByTestId("b");
+
+    fireEvent.change(inputA, { target: { value: 2 } });
+    fireEvent.change(inputB, { target: { valueB: 3 } });
+
+    expect(inputA).toBe(2);
+    expect(inputB).toBe(3);
+  });
+
+  it("Should update the select when selecting a new one", () => {
+    const operator = screen.getByTestId("operator");
+
+    fireEvent.change(screen.getByTestId("operator"), {
+      target: { value: "sum" },
+    });
+
+    expect(operator).toBe("+");
+  });
+});
 
 describe("with decimals", () => {
   describe("successfully", () => {
@@ -236,7 +266,7 @@ describe("with integers", () => {
       });
 
       expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${divide(valueA, valueB)}`
+        "Result: You cant divide by 0"
       );
     });
   });
@@ -271,117 +301,5 @@ describe("Calculator Tests", () => {
     it("Check right input is 0", () => {
       expect(screen.getByTestId("b").value).toBe("0");
     });
-  });
-});
-
-describe("with alphanumeric", () => {
-  beforeEach(() => {
-    wordA = getRandomCharacter(9);
-    wordB = getRandomCharacter(9);
-
-    render(<Calculator />);
-
-    fireEvent.change(screen.getByTestId("a"), { target: { value: wordA } });
-    fireEvent.change(screen.getByTestId("b"), { target: { value: wordB } });
-  });
-
-  it("renders sum", () => {
-    fireEvent.change(screen.getByTestId("operator"), {
-      target: { value: "sum" },
-    });
-
-    expect(screen.getByTestId("result").textContent).toBe(
-      `Result: ${sum(wordA, wordB)}`
-    );
-  });
-
-  it("renders substract", () => {
-    fireEvent.change(screen.getByTestId("operator"), {
-      target: { value: "substract" },
-    });
-
-    expect(screen.getByTestId("result").textContent).toBe(
-      `Result: ${substract(wordA, wordB)}`
-    );
-  });
-
-  it("renders multiply", () => {
-    fireEvent.change(screen.getByTestId("operator"), {
-      target: { value: "multiply" },
-    });
-
-    expect(screen.getByTestId("result").textContent).toBe(
-      `Result: ${multiply(wordA, wordB)}`
-    );
-  });
-
-  it("renders divide", () => {
-    fireEvent.change(screen.getByTestId("operator"), {
-      target: { value: "divide" },
-    });
-
-    expect(screen.getByTestId("result").textContent).toBe(
-      `Result: ${divide(wordA, wordB)}`
-    );
-  });
-});*/
-}
-
-import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { Calculator } from "../Calculator";
-
-let valueA: number;
-let valueB: number;
-
-let wordA: string;
-let wordB: string;
-
-let inputA: any;
-let inputB: any;
-let inputOperator: any;
-let inputResult: any;
-
-describe("Calculator", () => {
-  it("should display the title", () => {
-    render(<Calculator />);
-    const title = screen.getByText("Simple Calculator");
-    expect(title).toBeInTheDocument();
-  });
-
-  it("should update the input fields when typing a number", () => {
-    render(<Calculator />);
-    const inputA = screen.getByTestId("a");
-    const inputB = screen.getByTestId("b");
-
-    fireEvent.change(inputA, { target: { value: "2" } });
-    fireEvent.change(inputB, { target: { value: "3" } });
-
-    expect(inputA.value).toBe("2");
-    expect(inputB.value).toBe("3");
-  });
-
-  it("should display an error message when entering an invalid number", () => {
-    render(<Calculator />);
-    const inputA = screen.getByTestId("a");
-
-    fireEvent.change(inputA, { target: { value: "abc" } });
-
-    const errorMessage = screen.getByText("Enter a valid number");
-    expect(errorMessage).toBeInTheDocument();
-  });
-
-  it("should display the result of the operation", () => {
-    render(<Calculator />);
-    const inputA = screen.getByTestId("a");
-    const inputB = screen.getByTestId("b");
-    const select = screen.getByTestId("operator");
-
-    fireEvent.change(inputA, { target: { value: "2" } });
-    fireEvent.change(inputB, { target: { value: "3" } });
-    fireEvent.change(select, { target: { value: "sum" } });
-
-    const result = screen.getByTestId("result");
-    expect(result.getAttribute("data-value")).toBe("5");
   });
 });

@@ -99,7 +99,9 @@ export const Calculator = () => {
 
   return (
     <div data-testid="calculator" style={styles.container}>
-      <h1 style={styles.title}>Simple Calculator</h1>
+      <h1 style={styles.title} data-testid="title">
+        Simple Calculator
+      </h1>
       <div>
         <input
           style={styles.input}
