@@ -16,6 +16,7 @@ export const Calculator = () => {
     operation: "sum",
   });
   const [history, setHistory] = React.useState([]);
+  let auxHistory = [];
 
   React.useEffect(() => {
     if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
@@ -29,24 +30,6 @@ export const Calculator = () => {
     }
     //eslint-disable-next-line
   }, [data.a, data.b, data.operation]);
-
-  /**
-   * Adds a new data element to the history and limits the number of elements to a maximum of 10.
-   *
-   * @param {Object[]} history - The current history of data.
-   * @param {Object} newData - The new data element to add to the history.
-   * @param {*} res - The result associated with the new data element.
-   * @param {Function} setHistory - The function to update the data history in the state.
-   * @returns {void}
-   */
-
-  const addDataHistory = (newData, res, history, setHistory) => {
-    const newHistory = [...history, newData];
-    if (newHistory.length >= 10) newHistory.shift();
-    newHistory.push({ ...newData, result: res });
-
-    setHistory(newHistory);
-  };
 
   const handleChange = (v) => {
     if (isNaN(parseFloat(v.target.value)))
@@ -63,7 +46,8 @@ export const Calculator = () => {
       newData.operation
     );
     setData({ ...newData, result: res });
-    addDataHistory(newData, res, history, setHistory);
+    const getHistory = operations.addDataHistory(newData, res, auxHistory);
+    setHistory(getHistory);
   };
 
   const handleSelect = (v) => {

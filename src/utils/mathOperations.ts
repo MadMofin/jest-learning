@@ -67,6 +67,17 @@ export function operation(a: number, b: number, operation: any) {
 
   return OPERATIONS[operation];
 }
+
+/**
+ * Adds a new data element to the history and limits the number of elements to a maximum of 10.
+ *
+ * @param {Object[]} history - The current history of data.
+ * @param {Object} newData - The new data element to add to the history.
+ * @param {*} res - The result associated with the new data element.
+ * @param {Function} addDataHistory - save the last 10 operations
+ * @returns {void}
+ */
+
 export function addDataHistory(
   newData: object,
   res: string | number,
