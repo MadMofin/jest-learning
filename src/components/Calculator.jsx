@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as operations from "../utils/mathOperations";
 import History from "./History";
+import { OPERATIONS_SYMBOLS } from "../constants/calculatorConstants";
 
 const styles = {
   input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
@@ -16,6 +17,7 @@ export const Calculator = () => {
     result: null,
     operation: "sum",
   });
+  const [history, setHistory] = React.useState([]);
 
   const HISTORY_LIMIT = 10;
 
@@ -38,6 +40,24 @@ export const Calculator = () => {
     //eslint-disable-next-line
   }, [data.a, data.b, data.operation]);
 
+  /**
+   * Adds a new data element to the history and limits the number of elements to a maximum of 10.
+   *
+   * @param {Object[]} history - The current history of data.
+   * @param {Object} newData - The new data element to add to the history.
+   * @param {*} res - The result associated with the new data element.
+   * @param {Function} setHistory - The function to update the data history in the state.
+   * @returns {void}
+   */
+
+  const addDataHistory = (newData, res, history, setHistory) => {
+    const newHistory = [...history, newData];
+    if (newHistory.length >= 10) newHistory.shift();
+    newHistory.push({ ...newData, result: res });
+
+    setHistory(newHistory);
+  };
+
   const handleChange = (v) => {
     if (isNaN(parseFloat(v.target.value)))
       return setData({
@@ -46,11 +66,39 @@ export const Calculator = () => {
         result: "Enter a valid number",
       });
 
-    return setData({ ...data, [v.target.name]: v.target.value });
+    const newData = { ...data, [v.target.name]: v.target.value };
+    const res = operations.operation(
+      parseFloat(newData.a),
+      parseFloat(newData.b),
+      newData.operation
+    );
+    setData({ ...newData, result: res });
+    addDataHistory(newData, res, history, setHistory);
   };
 
-  const handleSelect = (v) =>
-    setData({ ...data, [v.target.name]: v.target.value });
+  const handleSelect = (v) => {
+    const newData = { ...data, [v.target.name]: v.target.value };
+    const res = operations.operation(
+      parseFloat(newData.a),
+      parseFloat(newData.b),
+      newData.operation
+    );
+
+    setData({ ...newData, result: res });
+  };
+
+  React.useEffect(() => {
+    localStorage.setItem("calculatorHistory", JSON.stringify(history));
+    // eslint-disable-next-line
+  }, [history]);
+
+  React.useEffect(() => {
+    const getHistoryOperations = JSON.parse(
+      localStorage.getItem("calculatorHistory")
+    );
+    if (getHistoryOperations) setHistory(getHistoryOperations);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div data-testid="calculator">
@@ -86,6 +134,40 @@ export const Calculator = () => {
       </div>
 
       <History {...{ results }} />
+      {/* <h3 style={{ paddingTop: 12 }}>History of last operations c:</h3>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          padding: 10,
+        }}
+      >
+        <center>
+          {history && history.length > 0 ? (
+            history.map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: 8,
+                  marginBottom: 8,
+                  width: "50%",
+                }}
+              >
+                <p>{item.a}</p>
+                <p>{OPERATIONS_SYMBOLS[item.operation]}</p>
+                <p>{item.b}</p>
+                <p>=</p>
+                <p>{item.result}</p>
+              </div>
+            ))
+          ) : (
+            <p>No history available</p>
+          )}
+        </center>
+      </div> */}
     </div>
   );
 };

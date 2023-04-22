@@ -52,6 +52,7 @@ export function getRandomCharacter(max: number) {
   return getCharacters(max);
 }
 
+// eslint-disable-next-line
 interface IDictionary<Number> {
   [id: string]: number | string;
 }
@@ -66,3 +67,19 @@ export function operation(a: number, b: number, operation: any) {
 
   return OPERATIONS[operation];
 }
+export function addDataHistory(
+  newData: object,
+  res: string | number,
+  history: any[]
+) {
+  const newHistory = [...history, newData];
+  if (newHistory.length >= 10) newHistory.shift();
+  newHistory.push({ ...newData, result: res });
+  return newHistory;
+}
+
+export const getRandomWord = () => {
+  const words = ["divide", "multiply", "substract", "sum"];
+  const randomIndex = Math.floor(Math.random() * words.length);
+  return words[randomIndex];
+};
