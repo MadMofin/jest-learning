@@ -1,5 +1,7 @@
 import { addDataHistory } from "../../utils/mathOperations";
 import * as operations from "../../utils/mathOperations";
+import { Calculator } from "../Calculator";
+import { render, screen } from "@testing-library/react";
 
 const { getRandomInt } = operations;
 
@@ -13,6 +15,15 @@ const MAX_HISTORY_LENGHT = 10;
 const NUMBER_OPERATIONS = 15;
 
 describe("addDataHistory", () => {
+  it("Render History Container", () => {
+    render(<Calculator />);
+
+    const historyContainer = screen.getByTestId("rowHistory");
+    const noHistoryMessage = screen.getByTestId("noHistory");
+
+    expect(historyContainer).toBeInTheDocument();
+    expect(noHistoryMessage).toBeInTheDocument();
+  });
   test("update History", () => {
     newData = {
       a: number1,

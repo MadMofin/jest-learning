@@ -115,7 +115,7 @@ export const Calculator = () => {
           padding: 10,
         }}
       >
-        <center>
+        <center data-testid="rowHistory">
           {history && history.length > 0 ? (
             history.map((item, index) => (
               <div
@@ -128,15 +128,19 @@ export const Calculator = () => {
                   width: "50%",
                 }}
               >
-                <p>{item.a}</p>
-                <p>{OPERATIONS_SYMBOLS[item.operation]}</p>
-                <p>{item.b}</p>
+                <p data-testid="num1">{item.a}</p>
+                <p data-testid="operSymbol">
+                  {OPERATIONS_SYMBOLS[item.operation]}
+                </p>
+                <p data-testid="num2">{item.b}</p>
                 <p>=</p>
-                <p>{item.result}</p>
+                <p data-testid="resultHist">{item.result}</p>
               </div>
             ))
           ) : (
-            <p>No history available</p>
+            <div data-testid="noHistory">
+              <p>No history available</p>
+            </div>
           )}
         </center>
       </div>
