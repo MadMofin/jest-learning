@@ -134,7 +134,7 @@ export const Calculator = () => {
       </div>
 
       <History {...{ results }} />
-      {/* <h3 style={{ paddingTop: 12 }}>History of last operations c:</h3>
+      <h3 style={{ paddingTop: 12 }}>History of last operations c:</h3>
       <div
         style={{
           width: "100%",
@@ -167,7 +167,7 @@ export const Calculator = () => {
             <p>No history available</p>
           )}
         </center>
-      </div> */}
+      </div>
     </div>
   );
 };
