@@ -79,7 +79,7 @@ export const Calculator = () => {
 
   return (
     <div data-testid="calculator">
-      <h1>Simple calculator</h1>
+      <h1>Simple calculator :C</h1>
       <input
         style={styles.input}
         onChange={handleChange}
