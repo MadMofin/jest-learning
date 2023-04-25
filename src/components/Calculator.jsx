@@ -168,9 +168,16 @@ export const Calculator = () => {
           value={data.b}
         />
       </div>
-      <div style={styles.result} data-testid="result" data-value={data.result}>
-        <span>{data.result !== null && "Result: "}</span>
-        <span>{data.result !== null && data.result}</span>
+      <div
+        style={styles.result}
+        data-testid="resultBox"
+        data-value={`Result: ${data.error ? data.error : data.result}`}
+      >
+        <span data-testid="result">
+          {data && data.result && !data.error
+            ? `Result: ${data.result}`
+            : `Result: ${data.error}`}
+        </span>
       </div>
       <h3 style={{ paddingTop: 12 }}>History of last operations c:</h3>
       <div

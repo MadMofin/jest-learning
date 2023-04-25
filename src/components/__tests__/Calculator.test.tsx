@@ -37,8 +37,6 @@ it("all in screen", () => {
   expect(result).toBeInTheDocument();
 });
 
-{
-  /*
 describe("Calculator", () => {
   beforeEach(() => {
     render(<Calculator />);
@@ -49,10 +47,10 @@ describe("Calculator", () => {
     const inputB = screen.getByTestId("b");
 
     fireEvent.change(inputA, { target: { value: 2 } });
-    fireEvent.change(inputB, { target: { valueB: 3 } });
+    fireEvent.change(inputB, { target: { value: 3 } });
 
-    expect(inputA).toBe(2);
-    expect(inputB).toBe(3);
+    expect(inputA.value).toBe("2");
+    expect(inputB.value).toBe("3");
   });
 
   it("Should update the select when selecting a new one", () => {
@@ -62,10 +60,9 @@ describe("Calculator", () => {
       target: { value: "sum" },
     });
 
-    expect(operator).toBe("+");
+    expect(operator.value).toBe("sum");
   });
-});*/
-}
+});
 
 describe("with decimals", () => {
   describe("successfully", () => {
@@ -149,15 +146,13 @@ describe("with decimals", () => {
     });
   });
 
-  {
-    /*
   describe("errors", () => {
     beforeEach(() => {
-      valueA = getRandomFloat(9);
+      valueA = getRandomFloat(9) + 1;
       valueB = 0;
     });
 
-    it("render divide by 0", () => {
+    it.skip("render divide by 0", () => {
       render(<Calculator />);
 
       fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
@@ -167,12 +162,10 @@ describe("with decimals", () => {
       });
 
       expect(screen.getByTestId("result").textContent).toBe(
-        `Result: ${divide(valueA, valueB)}`
+        `Result: You cant divide by 0`
       );
     });
   });
-  */
-  }
 });
 
 describe("with integers", () => {
@@ -256,15 +249,14 @@ describe("with integers", () => {
       );
     });
   });
-  {
-    /*
+
   describe("errors", () => {
     beforeEach(() => {
       valueA = getRandomFloat(9);
       valueB = 0;
     });
 
-     it("render divide by 0", () => {
+    it.skip("render divide by 0", () => {
       render(<Calculator />);
 
       fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
@@ -278,8 +270,6 @@ describe("with integers", () => {
       );
     });
   });
-  */
-  }
 });
 
 describe("Calculator Tests", () => {
