@@ -2,8 +2,36 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { Calculator } from "../Calculator";
 import App from "../../App";
 import * as operations from "../../utils/mathOperations";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("../../utils/mathOperations");
+
+const {
+  divide,
+  getRandomCharacter,
+  getRandomFloat,
+  getRandomInt,
+  multiply,
+  substract,
+  sum,
+} = operations;
+
+it("all in screen", () => {
+  render(<App />);
+
+  const calculator = screen.getByTestId("calculator");
+
+  const a = screen.getByTestId("a");
+  const b = screen.getByTestId("b");
+  const result = screen.getByTestId("result");
+  const submitButton = screen.getByTestId("submit");
+
+  expect(a).toBeInTheDocument();
+  expect(b).toBeInTheDocument();
+  expect(result).toBeInTheDocument();
+  expect(calculator).toBeInTheDocument();
+  expect(submitButton).toBeInTheDocument();
+});
 
 let valueA: number;
 let valueB: number;
@@ -15,9 +43,6 @@ let inputA: any;
 let inputB: any;
 let inputOperator: any;
 let inputResult: any;
-
-const { divide, getRandomCharacter, getRandomFloat, multiply, substract, sum } =
-  operations;
 
 it("all in screen", () => {
   render(<App />);
@@ -152,7 +177,7 @@ describe("with decimals", () => {
       valueB = 0;
     });
 
-    it.skip("render divide by 0", () => {
+    it("render divide by 0", () => {
       render(<Calculator />);
 
       fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
@@ -160,6 +185,7 @@ describe("with decimals", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
+      userEvent.click(screen.getByTestId("submit"));
 
       expect(screen.getByTestId("result").textContent).toBe(
         `Result: You cant divide by 0`
@@ -264,6 +290,7 @@ describe("with integers", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
+      userEvent.click(screen.getByTestId("submit"));
 
       expect(screen.getByTestId("result").textContent).toBe(
         "Result: You cant divide by 0"
@@ -301,5 +328,61 @@ describe("Calculator Tests", () => {
     it("Check right input is 0", () => {
       expect(screen.getByTestId("b").value).toBe("0");
     });
+  });
+});
+
+describe("with alphanumeric", () => {
+  beforeEach(() => {
+    wordA = getRandomCharacter(9);
+    wordB = getRandomCharacter(9);
+
+    render(<Calculator />);
+
+    fireEvent.change(screen.getByTestId("a"), { target: { value: wordA } });
+    fireEvent.change(screen.getByTestId("b"), { target: { value: wordB } });
+  });
+
+  it("renders sum", () => {
+    fireEvent.change(screen.getByTestId("operator"), {
+      target: { value: "sum" },
+    });
+    userEvent.click(screen.getByTestId("submit"));
+
+    expect(screen.getByTestId("result").textContent).toBe(
+      `Result: ${sum(wordA, wordB)}`
+    );
+  });
+
+  it("renders substract", () => {
+    fireEvent.change(screen.getByTestId("operator"), {
+      target: { value: "substract" },
+    });
+    userEvent.click(screen.getByTestId("submit"));
+
+    expect(screen.getByTestId("result").textContent).toBe(
+      `Result: ${substract(wordA, wordB)}`
+    );
+  });
+
+  it("renders multiply", () => {
+    fireEvent.change(screen.getByTestId("operator"), {
+      target: { value: "multiply" },
+    });
+    userEvent.click(screen.getByTestId("submit"));
+
+    expect(screen.getByTestId("result").textContent).toBe(
+      `Result: ${multiply(wordA, wordB)}`
+    );
+  });
+
+  it("renders divide", () => {
+    fireEvent.change(screen.getByTestId("operator"), {
+      target: { value: "divide" },
+    });
+    userEvent.click(screen.getByTestId("submit"));
+
+    expect(screen.getByTestId("result").textContent).toBe(
+      `Result: ${divide(wordA, wordB)}`
+    );
   });
 });
