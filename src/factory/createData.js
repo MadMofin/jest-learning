@@ -42,3 +42,28 @@ export const albumFactory =
     title: "default title",
     songs: [],
   };
+
+export const historyFactory = factory.makeFactory({
+  a: factory.sequence("a", (n) => n),
+  b: factory.sequence("b", (n) => n + 1),
+  operation: factory.random.oneOf(["ADD", "SUBTRACT", "MULTIPLY", "DIVIDE"]),
+  result: factory.lazy((attrs) => {
+    const { a, b, operation } = attrs;
+    switch (operation) {
+      case "ADD":
+        return a + b;
+      case "SUBTRACT":
+        return a - b;
+      case "MULTIPLY":
+        return a * b;
+      case "DIVIDE":
+        return a / b;
+      default:
+        return null;
+    }
+  }),
+});
+
+const history = historyFactory.buildList(10); // crea una lista de 10 elementos aleatorios basados en la estructura definida
+
+export default history;

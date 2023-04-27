@@ -1,7 +1,8 @@
 import { addDataHistory } from "../../utils/mathOperations";
 import * as operations from "../../utils/mathOperations";
 import { Calculator } from "../Calculator";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import historyFactoryNum from "../../factory/createOperations";
 
 const { getRandomInt } = operations;
 
@@ -24,6 +25,26 @@ describe("addDataHistory", () => {
     expect(historyContainer).toBeInTheDocument();
     expect(noHistoryMessage).toBeInTheDocument();
   });
+
+  test("Displays the history of 10 operations", () => {
+    const { getByTestId } = render(<Calculator />);
+
+    for (let i = 1; i <= 10; i++) {
+      const aInput = getByTestId("a");
+      const bInput = getByTestId("b");
+      const operatorSelect = getByTestId("operator");
+      const result = getByTestId(`result`);
+      fireEvent.change(aInput, { target: { value: i } });
+      fireEvent.change(bInput, { target: { value: i + 1 } });
+      fireEvent.change(operatorSelect, { target: { value: "sum" } });
+      expect(result.textContent).toBe(`Result: ${i + i + 1}`);
+    }
+
+    // Check that the history shows only the last 10 operations
+    const rowHistory = getByTestId("rowHistory");
+    expect(rowHistory.children.length).toBeLessThanOrEqual(10);
+  });
+
   test("update History", () => {
     newData = {
       a: number1,
