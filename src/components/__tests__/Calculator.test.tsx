@@ -284,21 +284,19 @@ describe("with integers", () => {
       valueB = 0;
     });
 
-    it("render divide by 0", async () => {
+    it("render divide by 0", () => {
       render(<Calculator />);
 
-      await act(() => {
-        fireEvent.change(screen.getByTestId("a"), {
-          target: { value: valueA },
-        });
-        fireEvent.change(screen.getByTestId("b"), {
-          target: { value: valueB },
-        });
-        fireEvent.change(screen.getByTestId("operator"), {
-          target: { value: "divide" },
-        });
-        userEvent.click(screen.getByTestId("submit"));
+      fireEvent.change(screen.getByTestId("a"), {
+        target: { value: valueA },
       });
+      fireEvent.change(screen.getByTestId("b"), {
+        target: { value: valueB },
+      });
+      fireEvent.change(screen.getByTestId("operator"), {
+        target: { value: "divide" },
+      });
+      fireEvent.click(screen.getByTestId("submit"));
 
       inputResult = screen.getByTestId("result");
 
