@@ -40,7 +40,8 @@ describe("addDataHistory", () => {
     }
 
     const rowHistory = screen.getByTestId("rowHistory");
-    expect(rowHistory.children.length).toBeLessThanOrEqual(10);
+    const children = rowHistory.querySelectorAll(":scope > *");
+    expect(children.length).toBeLessThanOrEqual(10);
   });
 
   test("update History", () => {
