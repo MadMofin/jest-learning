@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { Calculator } from "../Calculator";
 import App from "../../App";
 import * as operations from "../../utils/mathOperations";
@@ -284,22 +284,25 @@ describe("with integers", () => {
       valueB = 0;
     });
 
-    it("render divide by 0", () => {
+    it("render divide by 0", async () => {
       render(<Calculator />);
 
-      fireEvent.change(screen.getByTestId("a"), { target: { value: valueA } });
-      fireEvent.change(screen.getByTestId("b"), { target: { value: valueB } });
-      fireEvent.change(screen.getByTestId("operator"), {
-        target: { value: "divide" },
+      await act(() => {
+        fireEvent.change(screen.getByTestId("a"), {
+          target: { value: valueA },
+        });
+        fireEvent.change(screen.getByTestId("b"), {
+          target: { value: valueB },
+        });
+        fireEvent.change(screen.getByTestId("operator"), {
+          target: { value: "divide" },
+        });
+        userEvent.click(screen.getByTestId("submit"));
       });
-      userEvent.click(screen.getByTestId("submit"));
+
       inputResult = screen.getByTestId("result");
 
-      setTimeout(() => {
-        expect(screen.getByTestId("result").textContent).toBe(
-          "Result: You cant divide by 0"
-        );
-      }, 100);
+      expect(inputResult.textContent).toBe("Result: You cant divide by 0");
     });
   });
 });
