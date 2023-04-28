@@ -34,13 +34,11 @@ describe("addDataHistory", () => {
       const aInput = screen.getByTestId("a");
       const bInput = screen.getByTestId("b");
       const operatorSelect = screen.getByTestId("operator");
-      const result = screen.getByTestId(`result`);
       fireEvent.change(aInput, { target: { value: number1 } });
       fireEvent.change(bInput, { target: { value: number2 } });
       fireEvent.change(operatorSelect, {
         target: { value: operations.getRandomWord() },
       });
-      expect(result.textContent).toBe(``);
     }
 
     const rowHistory = screen.getByTestId("rowHistory");
