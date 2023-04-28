@@ -42,6 +42,10 @@ describe("addDataHistory", () => {
       });
       expect(result.textContent).toBe(``);
     }
+
+    const rowHistory = screen.getByTestId("rowHistory");
+    const children = rowHistory.querySelectorAll(":scope > *");
+    expect(children.length).toBeLessThanOrEqual(NUMBER_OPERATIONS);
   });
 
   test("update History", () => {
