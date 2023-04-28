@@ -1,13 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, act } from "@testing-library/react";
 
 import App from "../../App";
-import * as operations from "../../utils/mathOperations";
-import { Calculator } from "../Calculator";
-import userEvent from "@testing-library/user-event";
-
-jest.mock("../../utils/mathOperations");
-
-const {
+import {
   divide,
   getRandomCharacter,
   getRandomFloat,
@@ -15,7 +9,30 @@ const {
   multiply,
   substract,
   sum,
-} = operations;
+  operation,
+} from "../../utils/mathOperations";
+
+import { Calculator } from "../Calculator";
+import userEvent from "@testing-library/user-event";
+
+jest.mock("../../utils/mathOperations", () => ({
+  getRandomFloat: jest.fn(),
+  divide: jest.fn(),
+  multiply: jest.fn(),
+  substract: jest.fn(),
+  sum: jest.fn(),
+  getRandomCharacter: jest.fn(),
+  getRandomInt: jest.fn(),
+  operation: jest.fn(),
+}));
+
+const mockedGetRandomFloat = getRandomFloat as jest.MockedFunction<
+  typeof getRandomFloat
+>;
+const mockedGetRandomInt = getRandomInt as jest.MockedFunction<
+  typeof getRandomInt
+>;
+const mockedOperation = operation as jest.MockedFunction<typeof operation>;
 
 it("all in screen", () => {
   render(<App />);
@@ -48,12 +65,12 @@ let inputResult: any;
 describe("with decimals", () => {
   describe("successfully", () => {
     beforeEach(() => {
-      operations.getRandomFloat.mockReturnValue(Math.floor(Math.random() * 10));
+      mockedGetRandomFloat.mockReturnValue(Math.floor(Math.random() * 10));
 
-      valueA = operations.getRandomFloat(9);
-      valueB = operations.getRandomFloat(9) + 1;
+      valueA = getRandomFloat(9);
+      valueB = getRandomFloat(9) + 1;
 
-      operations.operation.mockReturnValue(valueA + valueB);
+      mockedOperation.mockReturnValue(valueA + valueB);
 
       render(<Calculator />);
 
@@ -141,7 +158,10 @@ describe("with decimals", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
-      userEvent.click(screen.getByTestId("submit"));
+
+      act(() => {
+        userEvent.click(screen.getByTestId("submit"));
+      });
 
       expect(screen.getByTestId("result").textContent).toBe(
         `Result: ${divide(valueA, valueB)}`
@@ -153,12 +173,12 @@ describe("with decimals", () => {
 describe("with integers", () => {
   describe("successfully", () => {
     beforeEach(() => {
-      operations.getRandomInt.mockReturnValue(Math.floor(Math.random() * 10));
+      mockedGetRandomInt.mockReturnValue(Math.floor(Math.random() * 10));
 
-      valueA = operations.getRandomInt(9);
-      valueB = operations.getRandomInt(9) + 1;
+      valueA = getRandomInt(9);
+      valueB = getRandomInt(9) + 1;
 
-      operations.operation.mockReturnValue(valueA + valueB);
+      mockedOperation.mockReturnValue(valueA + valueB);
 
       render(<Calculator />);
 
@@ -246,7 +266,10 @@ describe("with integers", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
-      userEvent.click(screen.getByTestId("submit"));
+
+      act(() => {
+        userEvent.click(screen.getByTestId("submit"));
+      });
 
       expect(screen.getByTestId("result").textContent).toBe(
         `Result: ${divide(valueA, valueB)}`
@@ -278,11 +301,11 @@ describe("Calculator Tests", () => {
     });
 
     it("Check left input is 0", () => {
-      expect(screen.getByTestId("a").value).toBe("0");
+      expect((screen.getByTestId("a") as HTMLInputElement).value).toBe("0");
     });
 
     it("Check right input is 0", () => {
-      expect(screen.getByTestId("b").value).toBe("0");
+      expect((screen.getByTestId("b") as HTMLInputElement).value).toBe("0");
     });
   });
 });
@@ -302,7 +325,10 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "sum" },
     });
-    userEvent.click(screen.getByTestId("submit"));
+
+    act(() => {
+      userEvent.click(screen.getByTestId("submit"));
+    });
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${sum(wordA, wordB)}`
@@ -313,7 +339,9 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "substract" },
     });
-    userEvent.click(screen.getByTestId("submit"));
+    act(() => {
+      userEvent.click(screen.getByTestId("submit"));
+    });
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${substract(wordA, wordB)}`
@@ -324,7 +352,10 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "multiply" },
     });
-    userEvent.click(screen.getByTestId("submit"));
+
+    act(() => {
+      userEvent.click(screen.getByTestId("submit"));
+    });
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${multiply(wordA, wordB)}`
@@ -335,7 +366,10 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "divide" },
     });
-    userEvent.click(screen.getByTestId("submit"));
+
+    act(() => {
+      userEvent.click(screen.getByTestId("submit"));
+    });
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${divide(wordA, wordB)}`

@@ -78,49 +78,57 @@ export const Calculator = () => {
   }, []);
 
   return (
-    <div data-testid="calculator">
-      <h1>Simple calculator :DDD</h1>
-      <input
-        style={styles.input}
-        onChange={handleChange}
-        name="a"
-        data-testid="a"
-        value={data.a}
-      />
-      <select
-        style={styles.select}
-        onChange={handleSelect}
-        name="operation"
-        data-testid="operator"
-        value={data.operation}
+    <div data-testid="calculator" style={styles.container}>
+      <h1 style={styles.title} data-testid="title">
+        Simple calculator :DDD
+      </h1>
+      <div>
+        <input
+          style={styles.input}
+          onChange={handleChange}
+          name="a"
+          data-testid="a"
+          value={data.a}
+        />
+        <select
+          style={styles.select}
+          onChange={handleSelect}
+          name="operation"
+          data-testid="operator"
+          value={data.operation}
+        >
+          <option value="sum">+</option>
+          <option value="substract">-</option>
+          <option value="divide">/</option>
+          <option value="multiply">*</option>
+        </select>
+        <input
+          style={styles.input}
+          onChange={handleChange}
+          name="b"
+          data-testid="b"
+          value={data.b}
+        />
+        <button
+          data-testid="submit"
+          style={{
+            height: 48,
+            width: 150,
+            color: "white",
+            backgroundColor: "hotpink",
+            borderRadius: 5,
+            border: 0,
+          }}
+          onClick={handleSubmit}
+        >
+          Calcular
+        </button>
+      </div>
+      <div
+        style={styles.result}
+        data-testid="result"
+        data-value={`Result: ${data.error ? data.error : data.result}`}
       >
-        <option value="sum">Sum</option>
-        <option value="substract">Substract</option>
-        <option value="divide">Divide</option>
-        <option value="multiply">Multiply</option>
-      </select>
-      <input
-        style={styles.input}
-        onChange={handleChange}
-        name="b"
-        data-testid="b"
-        value={data.b}
-      />
-      <button
-        data-testid="submit"
-        style={{
-          height: 48,
-          width: 150,
-          color: "white",
-          backgroundColor: "hotpink",
-          borderRadius: 5,
-          border: 0,
-        }}
-        onClick={handleSubmit}
-      >
-        Calcular
-      </button>
-      <div style={styles.result} data-testid="result" data-value={data.result}>
         {data.result !== null && "Result: " + data.result}
       </div>
       <h3 style={{ paddingTop: 12 }}>History of last operations c:</h3>
@@ -132,7 +140,7 @@ export const Calculator = () => {
           padding: 10,
         }}
       >
-        <center>
+        <center data-testid="rowHistory">
           {history && history.length > 0 ? (
             history.map((item, index) => (
               <div
@@ -145,15 +153,19 @@ export const Calculator = () => {
                   width: "50%",
                 }}
               >
-                <p>{item.a}</p>
-                <p>{OPERATIONS_SYMBOLS[item.operation]}</p>
-                <p>{item.b}</p>
+                <p data-testid="num1">{item.a}</p>
+                <p data-testid="operSymbol">
+                  {OPERATIONS_SYMBOLS[item.operation]}
+                </p>
+                <p data-testid="num2">{item.b}</p>
                 <p>=</p>
-                <p>{item.result}</p>
+                <p data-testid="resultHist">{item.result}</p>
               </div>
             ))
           ) : (
-            <p>No history available</p>
+            <div data-testid="noHistory">
+              <p>No history available</p>
+            </div>
           )}
         </center>
       </div>
