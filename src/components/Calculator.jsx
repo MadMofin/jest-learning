@@ -3,50 +3,9 @@ import * as operations from "../utils/mathOperations";
 import { OPERATIONS_SYMBOLS } from "../constants/calculatorConstants";
 
 const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: "100vh",
-    backgroundColor: "#F6F6F6",
-    fontFamily: "sans-serif",
-  },
-  title: {
-    margin: 0,
-    fontSize: 36,
-    fontWeight: "bold",
-    color: "#333333",
-    marginBottom: 20,
-  },
-  input: {
-    margin: 10,
-    height: 40,
-    fontSize: 20,
-    padding: 10,
-    border: "1px solid #C4C4C4",
-    borderRadius: 5,
-    outline: "none",
-  },
-  select: {
-    margin: 10,
-    height: 50,
-    fontSize: 20,
-    padding: 10,
-    border: "1px solid #C4C4C4",
-    borderRadius: 5,
-    outline: "none",
-  },
-  result: {
-    margin: 10,
-    height: 35,
-    fontSize: 30,
-    padding: 10,
-    border: "1px solid #C4C4C4",
-    borderRadius: 5,
-    outline: "none",
-    backgroundColor: "#FFFFFF",
-  },
+  input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
+  select: { margin: 10, height: 50, fontSize: 20, padding: 10 },
+  result: { margin: 10, height: 25, fontSize: 40, padding: 10 },
 };
 
 export const Calculator = () => {
@@ -57,31 +16,30 @@ export const Calculator = () => {
     operation: "sum",
   });
   const [history, setHistory] = React.useState([]);
-  let auxHistory = [];
 
-  React.useEffect(() => {
-    if (
-      !(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b))) &&
-      data.a !== "" &&
-      data.b !== ""
-    ) {
-      const res = operations.operation(
-        parseFloat(data.a),
-        parseFloat(data.b),
-        data.operation
-      );
-      setData({ ...data, result: res });
-    }
-    //eslint-disable-next-line
-  }, [data.a, data.b, data.operation]);
+  /**
+   * Adds a new data element to the history and limits the number of elements to a maximum of 10.
+   *
+   * @param {Object[]} history - The current history of data.
+   * @param {Object} newData - The new data element to add to the history.
+   * @param {*} res - The result associated with the new data element.
+   * @param {Function} setHistory - The function to update the data history in the state.
+   * @returns {void}
+   */
+
+  const addDataHistory = (newData) => {
+    const newHistory = [newData, ...history];
+    if (newHistory.length >= 10) newHistory.pop();
+
+    setHistory(newHistory);
+  };
 
   const handleChange = (v) => {
     if (isNaN(parseFloat(v.target.value)))
       return setData({
         ...data,
         [v.target.name]: v.target.value,
-        result: null,
-        error: "Enter a valid number",
+        result: "Enter a valid number",
       });
 
     setData({ ...data, [v.target.name]: v.target.value });
@@ -99,8 +57,7 @@ export const Calculator = () => {
         ...data,
         result: res,
       });
-      const getHistory = operations.addDataHistory(newData, res, auxHistory);
-      setHistory(getHistory);
+      addDataHistory({ ...data, result: res });
     }
   };
 
