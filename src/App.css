@@ -37,11 +37,6 @@
   }
 }
 
-.historyContainer {
-  display: flex;
-  justify-content: center;
-}
-
 table,
 th,
 td {

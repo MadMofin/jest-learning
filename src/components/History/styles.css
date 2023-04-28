@@ -1,0 +1,42 @@
+.historyContainer {
+  display: flex;
+  justify-content: center;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.historyContainer h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+table {
+  width: 50%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+th {
+  text-align: left;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+td:first-child {
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

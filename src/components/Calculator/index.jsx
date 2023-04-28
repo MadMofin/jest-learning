@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import * as operations from "../utils/mathOperations";
-import History from "./History";
-import { OPERATIONS_SYMBOLS } from "../constants/calculatorConstants";
+import React from "react";
+import * as operations from "../../utils/mathOperations";
+import { OPERATIONS_SYMBOLS } from "../../constants/calculatorConstants";
+import History from "../History";
 
 const styles = {
   input: { margin: 10, height: 25, fontSize: 20, padding: 10 },
@@ -10,7 +10,7 @@ const styles = {
 };
 
 export const Calculator = () => {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = React.useState([]);
   const [data, setData] = React.useState({
     a: 0,
     b: 0,
@@ -22,7 +22,7 @@ export const Calculator = () => {
   const HISTORY_LIMIT = 10;
 
   const handleHistoryAddOperation = (data, res) => {
-    let newResults = results || [];
+    const newResults = results || [];
     if (newResults.length >= HISTORY_LIMIT) newResults.shift();
     setResults([...newResults, { ...data, total: res }]);
   };
@@ -34,7 +34,6 @@ export const Calculator = () => {
         parseFloat(data.b),
         data.operation
       );
-      handleHistoryAddOperation(data, res);
       setData({ ...data, result: res });
     }
     //eslint-disable-next-line
@@ -56,6 +55,8 @@ export const Calculator = () => {
 
     setHistory(newHistory);
   };
+
+  const handleClickNumber = (number) => {};
 
   const handleChange = (v) => {
     if (isNaN(parseFloat(v.target.value)))
@@ -81,6 +82,7 @@ export const Calculator = () => {
         result: res,
       });
       addDataHistory({ ...data, result: res });
+      handleHistoryAddOperation(data, res);
     }
   };
 
