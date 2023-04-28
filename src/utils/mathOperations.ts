@@ -67,7 +67,6 @@ export function operation(a: number, b: number, operation: any) {
 
   return OPERATIONS[operation];
 }
-
 export function addDataHistory(
   newData: object,
   res: string | number,
