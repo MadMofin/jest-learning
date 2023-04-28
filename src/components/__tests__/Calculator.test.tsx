@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import App from "../../App";
 import * as operations from "../../utils/mathOperations";
 import { Calculator } from "../Calculator";
+import userEvent from "@testing-library/user-event";
 
 jest.mock("../../utils/mathOperations");
 
@@ -24,11 +25,13 @@ it("all in screen", () => {
   const a = screen.getByTestId("a");
   const b = screen.getByTestId("b");
   const result = screen.getByTestId("result");
+  const submitButton = screen.getByTestId("submit");
 
   expect(a).toBeInTheDocument();
   expect(b).toBeInTheDocument();
   expect(result).toBeInTheDocument();
   expect(calculator).toBeInTheDocument();
+  expect(submitButton).toBeInTheDocument();
 });
 
 let valueA: number;
@@ -138,6 +141,7 @@ describe("with decimals", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
+      userEvent.click(screen.getByTestId("submit"));
 
       expect(screen.getByTestId("result").textContent).toBe(
         `Result: ${divide(valueA, valueB)}`
@@ -242,6 +246,7 @@ describe("with integers", () => {
       fireEvent.change(screen.getByTestId("operator"), {
         target: { value: "divide" },
       });
+      userEvent.click(screen.getByTestId("submit"));
 
       expect(screen.getByTestId("result").textContent).toBe(
         `Result: ${divide(valueA, valueB)}`
@@ -297,6 +302,7 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "sum" },
     });
+    userEvent.click(screen.getByTestId("submit"));
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${sum(wordA, wordB)}`
@@ -307,6 +313,7 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "substract" },
     });
+    userEvent.click(screen.getByTestId("submit"));
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${substract(wordA, wordB)}`
@@ -317,6 +324,7 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "multiply" },
     });
+    userEvent.click(screen.getByTestId("submit"));
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${multiply(wordA, wordB)}`
@@ -327,6 +335,7 @@ describe("with alphanumeric", () => {
     fireEvent.change(screen.getByTestId("operator"), {
       target: { value: "divide" },
     });
+    userEvent.click(screen.getByTestId("submit"));
 
     expect(screen.getByTestId("result").textContent).toBe(
       `Result: ${divide(wordA, wordB)}`

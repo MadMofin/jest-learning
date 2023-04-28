@@ -24,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint"
   },
   "eslintConfig": {
     "extends": [
@@ -47,6 +48,8 @@
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "@types/moxios": "^0.4.15",
+    "eslint": "^8.39.0",
+    "eslint-config-react-app": "^7.0.1",
     "factory.ts": "^1.4.0",
     "jest": "^27.5.1"
   },

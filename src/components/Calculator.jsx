@@ -50,10 +50,9 @@ export const Calculator = () => {
    * @returns {void}
    */
 
-  const addDataHistory = (newData, res, history, setHistory) => {
-    const newHistory = [...history, newData];
-    if (newHistory.length >= 10) newHistory.shift();
-    newHistory.push({ ...newData, result: res });
+  const addDataHistory = (newData) => {
+    const newHistory = [newData, ...history];
+    if (newHistory.length >= 10) newHistory.pop();
 
     setHistory(newHistory);
   };
@@ -66,26 +65,27 @@ export const Calculator = () => {
         result: "Enter a valid number",
       });
 
-    const newData = { ...data, [v.target.name]: v.target.value };
-    const res = operations.operation(
-      parseFloat(newData.a),
-      parseFloat(newData.b),
-      newData.operation
-    );
-    setData({ ...newData, result: res });
-    addDataHistory(newData, res, history, setHistory);
+    setData({ ...data, [v.target.name]: v.target.value });
   };
 
-  const handleSelect = (v) => {
-    const newData = { ...data, [v.target.name]: v.target.value };
-    const res = operations.operation(
-      parseFloat(newData.a),
-      parseFloat(newData.b),
-      newData.operation
-    );
+  const handleSubmit = () => {
+    if (!(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b)))) {
+      const res = operations.operation(
+        parseFloat(data.a),
+        parseFloat(data.b),
+        data.operation
+      );
 
-    setData({ ...newData, result: res });
+      setData({
+        ...data,
+        result: res,
+      });
+      addDataHistory({ ...data, result: res });
+    }
   };
+
+  const handleSelect = (v) =>
+    setData({ ...data, [v.target.name]: v.target.value });
 
   React.useEffect(() => {
     localStorage.setItem("calculatorHistory", JSON.stringify(history));
@@ -102,20 +102,13 @@ export const Calculator = () => {
 
   return (
     <div data-testid="calculator">
-      <h1>Simple calculator</h1>
+      <h1>Simple calculator :DDD</h1>
       <input
         style={styles.input}
         onChange={handleChange}
         name="a"
         data-testid="a"
         value={data.a}
-      />
-      <input
-        style={styles.input}
-        onChange={handleChange}
-        name="b"
-        data-testid="b"
-        value={data.b}
       />
       <select
         style={styles.select}
@@ -129,6 +122,27 @@ export const Calculator = () => {
         <option value="divide">Divide</option>
         <option value="multiply">Multiply</option>
       </select>
+      <input
+        style={styles.input}
+        onChange={handleChange}
+        name="b"
+        data-testid="b"
+        value={data.b}
+      />
+      <button
+        data-testid="submit"
+        style={{
+          height: 48,
+          width: 150,
+          color: "white",
+          backgroundColor: "hotpink",
+          borderRadius: 5,
+          border: 0,
+        }}
+        onClick={handleSubmit}
+      >
+        Calcular
+      </button>
       <div style={styles.result} data-testid="result" data-value={data.result}>
         {data.result !== null && "Result: " + data.result}
       </div>
