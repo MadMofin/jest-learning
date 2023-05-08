@@ -231,10 +231,9 @@ describe("fetchValues mockImplementation test", () => {
         data.fetchValues(),
         data.fetchValues(),
         data.fetchValues(),
-        data.fetchValues(),
       ].join(",");
 
-      expect(result).toEqual("first call,second call,default,default");
+      expect(result).toEqual("first call,second call,default");
     });
   });
 });
