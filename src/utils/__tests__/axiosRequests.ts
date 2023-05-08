@@ -193,3 +193,48 @@ describe("fetchData", () => {
     });
   });
 });
+
+describe("fetchValues mockImplementation test", () => {
+  describe("when is successful", () => {
+    beforeEach(function () {
+      axiosInstance = axios.create();
+      moxios.install(axiosInstance);
+
+      todos = createTodos(getRandomInt(10));
+
+      moxios.stubRequest("https://jsonplaceholder.typicode.com/todos", {
+        status: 200,
+        response: todos,
+      });
+    });
+
+    afterEach(function () {
+      moxios.uninstall(axiosInstance);
+      jest.restoreAllMocks();
+    });
+
+    it("should return todos", async () => {
+      const response = await axiosInstance.get(
+        "https://jsonplaceholder.typicode.com/todos"
+      );
+      const { data } = response;
+
+      const fetchValuesMock = jest
+        .fn()
+        .mockImplementation(() => "default")
+        .mockImplementationOnce(() => "first call")
+        .mockImplementationOnce(() => "second call");
+
+      data.fetchValues = fetchValuesMock;
+
+      const result = [
+        data.fetchValues(),
+        data.fetchValues(),
+        data.fetchValues(),
+        data.fetchValues(),
+      ].join(",");
+
+      expect(result).toEqual("first call,second call,default,default");
+    });
+  });
+});

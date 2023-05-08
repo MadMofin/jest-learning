@@ -59,13 +59,11 @@ export const Calculator = () => {
   const [history, setHistory] = React.useState([]);
 
   React.useEffect(() => {
-    console.log(1, data.a, data.b, data.operation);
     if (
       !(isNaN(parseFloat(data.a)) || isNaN(parseFloat(data.b))) &&
       data.a !== "" &&
       data.b !== ""
     ) {
-      console.log(2, data.a, data.b, data.operation);
       const res = operations.operation(
         parseFloat(data.a),
         parseFloat(data.b),
